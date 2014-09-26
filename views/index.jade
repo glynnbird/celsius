@@ -9,7 +9,10 @@ body
       h3.text-muted
       
     div.jumbotron
-      div#celsius.pull-right=temperature
+      div.pull-right
+        div#celsius=temperature
+        div#date=date
+        
       h1 Celsius
 
       p.lead How hot is my room?

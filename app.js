@@ -14,19 +14,19 @@ app.set('view engine', 'jade');
 var getTemp = function(callback) {
   request({
     method: "GET",
-    url: "https://reader.cloudant.com/logger/_design/fetch/_view/byDate?reduce=false&descending=true&limit=1"
+    url: "https://reader.cloudant.com/logger/_design/fetch/_view/byDate?reduce=false&descending=true&limit=1&include_docs=true"
   }, function (err, res, data) {
     data = JSON.parse(data);
     var temperature = data.rows[0].value;
     temperature = (parseInt(temperature*10) / 10) + "°C";
-    callback(null, temperature);
+    callback(null, { temperature: temperature, date: data.rows[0].doc.date });
   })
 };
 
 // render index page
 app.get('/', function(req, res){
-  getTemp(function(err,temperature) {
-    res.render('index',{ temperature: temperature});
+  getTemp(function(err,data) {
+    res.render('index',data);
   })
 });
 
