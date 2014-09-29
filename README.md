@@ -13,7 +13,7 @@ This project demonstrates:
 
 ## Recording the data
 
-The DS18B20 sensor is connected to the GPIO like [https://www.modmypi.com/blog/ds18b20-one-wire-digital-temperature-sensor-and-the-raspberry-pi](this). Then a [https://gist.github.com/glynnbird/bb0f117baea8aca05639](simple Bash script) is used to query the senor and push a document into local CouchDB.
+The DS18B20 sensor is connected to the GPIO like [this](https://www.modmypi.com/blog/ds18b20-one-wire-digital-temperature-sensor-and-the-raspberry-pi). Then a [simple bash script](https://gist.github.com/glynnbird/bb0f117baea8aca05639) is used to query the senor and push a document into local CouchDB.
 
 The resultant documents look like this:
 
@@ -53,10 +53,11 @@ reduce: "_stats"
 
 ```
 
-which produces key/values like this
+which produces key/values like this, where the key is year/month/day/hour/minute:
 
 ```
   [2014,9,28,23,45] ---> 20.2
+  [2014,9,28,23,46] ---> 20.1
 ```
 
 The _stats reduce provides total, count, min & max values for the given range.
