@@ -6,7 +6,8 @@ var drawChart = function () {
   var data = google.visualization.arrayToDataTable(trend);
   var options = {
     title: 'Last 48 Hours, by hour',
-    legend: 'none'
+    legend: 'none',
+    colors: ["green"]
   };
   var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
   chart.draw(data, options);
@@ -14,7 +15,8 @@ var drawChart = function () {
   // monthly trend
   var data2 = google.visualization.arrayToDataTable(trend2);
   var options2 = {
-    title: 'Last Month, by day'
+    title: 'Last Month, by day',
+    colors: ["red","green","blue"]
   };
   var chart2 = new google.visualization.LineChart(document.getElementById('chart_div2'));
   chart2.draw(data2, options2);

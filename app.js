@@ -81,12 +81,13 @@ app.get('/', function(req, res){
     }
     
     // sort out the monthly trend
-    var trend2 = [ ["Hour", "Avg", "Min", "Max"] ];
+    var trend2 = [ ["Hour", "Max","Avg", "Min"] ];
     for(var i in data[2].rows) {
       var v = [ data[2].rows[i].key[2].toString() , // label
+                data[2].rows[i].value.max, // max
                 data[2].rows[i].value.sum / data[2].rows[i].value.count, // average
-                data[2].rows[i].value.min,  // min 
-                data[2].rows[i].value.max];   // max
+                data[2].rows[i].value.min]; // min 
+
       trend2.push(v);
     }
     
