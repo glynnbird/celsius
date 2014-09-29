@@ -2,6 +2,9 @@ doctype html
 html(lang="en")
 head
   include head.jade
+  script(type="text/javascript")  var trend = !{JSON.stringify(trend)}
+  script(type="text/javascript", src="https://www.google.com/jsapi")
+  script(type="text/javascript", src="/js/graph.js")
 
 body
   div.container
@@ -10,18 +13,21 @@ body
       
     div.jumbotron
       div.pull-right
-        div#celsius=temperature
-        div#date=date
+        div#celsius=latest.temperature
+        div#date=latest.date
         
       h1 Celsius
 
       p.lead How hot is my room?
       
     div.row
-      div.col-lg-6
+      div.col-lg-12
+        h2 Hourly trend
+        div#chart_div(width="100%")
 
-      div.col-lg-6 
 
+    
     div.footer
       p &copy; 2014
       
+  script(type="text/javascript") drawChart();

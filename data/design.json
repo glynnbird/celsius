@@ -1,0 +1,11 @@
+{ "docs": [{
+    "_id": "_design/fetch",
+    "views": {
+        "byDate": {
+            "reduce": "_stats",
+            "map": "function(doc) {\n  if (typeof doc.date == \"string\") {\n    var bits = doc.date.split(\" \");\n    var datebits = bits[0].split(\"-\");\n    var timebits = bits[1].split(\":\");\n    var year = parseInt(datebits[0],10);\n    var month = parseInt(datebits[1],10);\n    var day = parseInt(datebits[2],10);\n    var hour = parseInt(timebits[0],10);\n    var minute = parseInt(timebits[1],10); \n    emit([year, month, day, hour, minute], doc.temperature);\n  }\n}"
+        }
+    },
+    "language": "javascript"
+}]
+}
