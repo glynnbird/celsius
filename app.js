@@ -32,7 +32,8 @@ var getLatestTemp = function(callback) {
     reduce: false,
     descending: true, 
     limit: 1,
-    include_docs:true
+    include_docs:true,
+    stale: "ok"
   }
   logger.view('fetch','byDate', options, function(err, data) {
     var temperature = data.rows[0].value;
@@ -42,11 +43,25 @@ var getLatestTemp = function(callback) {
 };
 
 // fetch last 24 hour's hourly trend
-var getLatDaysTrend = function(callback) {
+var getLastDaysTrend = function(callback) {
   var y = moment().utc().subtract(1,'days');
   var options = {
     startkey: [y.year(), y.month()+1 , y.date(), y.hour()],
-    group_level:4
+    group_level:4,
+    stale: "ok"
+  };
+  logger.view('fetch','byDate', options, function(err, data) {
+    callback(null, data);
+  });
+}
+
+// fetch last month's daily trend
+var getLastMonthsTrend = function(callback) {
+  var y = moment().utc().subtract(1,'month');
+  var options = {
+    startkey: [y.year(), y.month()+1 , y.date()],
+    group_level:3,
+    stale: "ok"
   };
   logger.view('fetch','byDate', options, function(err, data) {
     callback(null, data);
@@ -55,14 +70,28 @@ var getLatDaysTrend = function(callback) {
 
 // render index page
 app.get('/', function(req, res){
-  var tasks = [getLatestTemp,  getLatDaysTrend];
+  var tasks = [getLatestTemp,  getLastDaysTrend, getLastMonthsTrend];
   async.parallel(tasks, function(err, data) {
+    
+    // sort out the hourly trend
     var trend = [ ["Hour", "Temperature"] ];
     for(var i in data[1].rows) {
       var v = [ data[1].rows[i].key[3].toString() , data[1].rows[i].value.sum / data[1].rows[i].value.count]
       trend.push(v);
     }
-    var d = { latest: data[0], trend: trend};
+    
+    // sort out the monthly trend
+    var trend2 = [ ["Hour", "Avg", "Min", "Max"] ];
+    for(var i in data[2].rows) {
+      var v = [ data[2].rows[i].key[2].toString() , // label
+                data[2].rows[i].value.sum / data[2].rows[i].value.count, // average
+                data[2].rows[i].value.min,  // min 
+                data[2].rows[i].value.max];   // max
+      trend2.push(v);
+    }
+    
+    // render the view
+    var d = { latest: data[0], trend: trend, trend2: trend2};
     res.render('index', d);
   });
 });

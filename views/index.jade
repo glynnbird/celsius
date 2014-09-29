@@ -2,7 +2,7 @@ doctype html
 html(lang="en")
 head
   include head.jade
-  script(type="text/javascript")  var trend = !{JSON.stringify(trend)}
+  script(type="text/javascript")  var trend = !{JSON.stringify(trend)}; var trend2 = !{JSON.stringify(trend2)}; 
   script(type="text/javascript", src="https://www.google.com/jsapi")
   script(type="text/javascript", src="/js/graph.js")
 
@@ -25,7 +25,10 @@ body
         h2 Hourly trend
         div#chart_div(width="100%")
 
-
+    div.row
+      div.col-lg-12
+        h2 Monthly trend
+        div#chart_div2(width="100%")
     
     div.footer
       p &copy; 2014
