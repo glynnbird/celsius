@@ -44,7 +44,7 @@ var getLatestTemp = function(callback) {
 
 // fetch last 24 hour's hourly trend
 var getLastDaysTrend = function(callback) {
-  var y = moment().utc().subtract(1,'days');
+  var y = moment().utc().subtract(2,'days');
   var options = {
     startkey: [y.year(), y.month()+1 , y.date(), y.hour()],
     group_level:4,
