@@ -7,6 +7,9 @@ head
   script(type="text/javascript", src="/js/graph.js")
 
 body
+  a(href="https://github.com/glynnbird/celsius")
+    img(style="position: absolute; top: 0; right: 0; border: 0;", src="https://camo.githubusercontent.com/365986a132ccd6a44c23a9169022c0b5c890c387/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f7265645f6161303030302e706e67", alt="Fork me on GitHub", data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png")
+
   div.container
     div.header
       h3.text-muted
@@ -28,7 +31,30 @@ body
       div.col-lg-12
         div#chart_div2(width="100%")
     
+    div.row
+      div.col-lg-12
+        h2 How does it work?
+        
+    div.row
+      div.col-md-6
+        p A DS18B20 sensor is connected to a Raspberry Pi which is reading the temperature of the room every minute.
+        p The readings are stored in CouchDB, a NoSQL JSON data store installed on the Raspberry Pi. CouchDB is setup to replicate its date to a cloud-based Cloudant database, whenever it can connect to the internet. Each reading looks something like this:
+        pre
+          |  {
+          |    "_id": "00339bc7cacd3311af73855de6839478",
+          |    "_rev": "1-0ef01b13ebf326d31b336389078d6953",
+          |    "ts": 1411723490,
+          |    "date": "2014-09-26 09:24:50 UTC",
+          |    "temperature": 20.937,
+          |    "sensor_id": "28-000006746cde"
+          |  }
+        p A Node.js app reads the data from the Cloudant database, aggregating it into daily and hourly averages for graphing purposes.
+        p 
+          a(href="https://github.com/glynnbird/celsius") Full code here
+      div.col-md-6
+        img.img-responsive(src="/img/circuit.png",alt="circuit diagram")         
+    
     div.footer
-      p &copy; 2014
+
       
   script(type="text/javascript") drawChart();
