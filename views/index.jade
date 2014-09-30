@@ -38,7 +38,7 @@ body
     div.row
       div.col-md-6
         p A DS18B20 sensor is connected to a Raspberry Pi which is reading the temperature of the room every minute.
-        p The readings are stored in CouchDB, a NoSQL JSON data store installed on the Raspberry Pi. CouchDB is setup to replicate its date to a cloud-based Cloudant database, whenever it can connect to the internet. Each reading looks something like this:
+        p The readings are stored in CouchDB, a NoSQL JSON data store installed on the Raspberry Pi. CouchDB is setup to replicate its data to a Cloudant database whenever it can connect to the internet. Each reading looks something like this:
         pre
           |  {
           |    "_id": "00339bc7cacd3311af73855de6839478",
@@ -48,7 +48,7 @@ body
           |    "temperature": 20.937,
           |    "sensor_id": "28-000006746cde"
           |  }
-        p A Node.js app reads the data from the Cloudant database, aggregating it into daily and hourly averages for graphing purposes.
+        p This is a Node.js app that reads the data from the Cloudant database, aggregating it into daily and hourly averages for graphing purposes.
         p 
           a(href="https://github.com/glynnbird/celsius") Full code here
       div.col-md-6
