@@ -2,10 +2,14 @@
 
 var express = require('express'),
   app = express(),
+  server = require('http').Server(app),
+  io = require('socket.io')(server),
   Cloudant = require('cloudant'),
   async = require('async'),
   moment = require('moment'),
   logger = null;
+  
+
   
 // connect to cloudant
 var opts = null;
@@ -18,6 +22,14 @@ if (typeof services != 'undefined') {
 Cloudant(opts, function(err, c) {
   cloudant = c;
   logger = cloudant.use("logger");
+  
+  // listen to the changes feed
+  var feed = logger.follow({since: "now", include_docs:true});
+  feed.on("change", function(change) {
+    //console.log(change.doc);
+    io.emit("post", change.doc);
+  });
+  feed.follow();
 });
   
 //setup static public directory
@@ -97,16 +109,14 @@ app.get('/', function(req, res){
   });
 });
 
-app.use(function(req, res, next){
-  res.redirect("/");
-});
+
 
 // The IP address of the Cloud Foundry DEA (Droplet Execution Agent) that hosts this application:
 var host = (process.env.VCAP_APP_HOST || 'localhost');
 // The port on the DEA for communication with the application:
 var port = (process.env.VCAP_APP_PORT || 3000);
 // Start server
-app.listen(port, host);
+server.listen(port, host);
 console.log('App started on port ' + port);
 
 

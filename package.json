@@ -7,7 +7,8 @@
     "cloudant": "^1.0.0-beta3",
     "express": "4.8.5",
     "jade": "1.1.4",
-    "moment": "^2.8.3"
+    "moment": "^2.8.3",
+    "socket.io": "^1.1.0"
   },
   "engines": {
     "node": "0.10.26"
