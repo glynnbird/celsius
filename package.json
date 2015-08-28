@@ -14,5 +14,6 @@
     "moment": "^2.8.3",
     "socket.io": "^1.3.6"
   },
-  "repository": "https://github.com/glynnbird/celsius"
+  "repository": "https://github.com/glynnbird/celsius",
+  "license": "Apache-2.0"
 }
