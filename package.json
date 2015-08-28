@@ -2,16 +2,17 @@
   "name": "celsius",
   "version": "0.0.1",
   "description": "How hot is my room?",
+  "scripts": {
+    "start": "node app.js"
+  },
   "dependencies": {
-    "async": "^0.9.0",
-    "cloudant": "^1.0.0-beta3",
-    "express": "4.8.5",
+    "async": "1.4.2",
+    "cfenv": "^1.0.0",
+    "cloudant": "1.3.0",
+    "express": "^4.13.3",
     "jade": "1.1.4",
     "moment": "^2.8.3",
-    "socket.io": "^1.1.0"
-  },
-  "engines": {
-    "node": "0.10.26"
+    "socket.io": "^1.3.6"
   },
   "repository": "https://github.com/glynnbird/celsius"
 }

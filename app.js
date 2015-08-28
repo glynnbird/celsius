@@ -1,7 +1,9 @@
 // app.js
 
 var express = require('express'),
-  app = express(),
+  cfenv = require('cfenv'),
+  appEnv = cfenv.getAppEnv(),
+  app = require('express')(),
   server = require('http').Server(app),
   io = require('socket.io')(server),
   Cloudant = require('cloudant'),
@@ -9,6 +11,12 @@ var express = require('express'),
   moment = require('moment'),
   logger = null;
   
+// start server on the specified port and binding host
+server.listen(appEnv.port, appEnv.bind, function() {
+
+	// print a message when the server starts listening
+  console.log("server starting on " + appEnv.url);
+});  
 
   
 // connect to cloudant
@@ -59,30 +67,39 @@ var getLastDaysTrend = function(callback) {
   var y = moment().utc().subtract(2,'days');
   var options = {
     startkey: [y.year(), y.month()+1 , y.date(), y.hour()],
-    group_level:4,
-    stale: "ok"
+    group_level:4
   };
   logger.view('fetch','byDate', options, function(err, data) {
     callback(null, data);
   });
-}
+};
 
 // fetch last month's daily trend
 var getLastMonthsTrend = function(callback) {
   var y = moment().utc().subtract(1,'month');
   var options = {
     startkey: [y.year(), y.month()+1 , y.date()],
-    group_level:3,
-    stale: "ok"
+    group_level:3
   };
   logger.view('fetch','byDate', options, function(err, data) {
     callback(null, data);
   });
-}
+};
+
+var getLastYearsTrend = function(callback) {
+  var y = moment().utc().subtract(12,'month');
+  var options = {
+    startkey: [y.year(), y.month()+1 , y.date()],
+    group_level:2
+  };
+  logger.view('fetch','byDate', options, function(err, data) {
+    callback(null, data);
+  });
+};
 
 // render index page
 app.get('/', function(req, res){
-  var tasks = [getLatestTemp,  getLastDaysTrend, getLastMonthsTrend];
+  var tasks = [getLatestTemp,  getLastDaysTrend, getLastMonthsTrend, getLastYearsTrend];
   async.parallel(tasks, function(err, data) {
     
     // sort out the hourly trend
@@ -103,20 +120,24 @@ app.get('/', function(req, res){
       trend2.push(v);
     }
     
+    // sort out the yearly trend
+    var trend3 = [ ["Month", "Max","Avg", "Min"] ];
+    for(var i in data[3].rows) {
+      var v = [ data[3].rows[i].key[1].toString() , // label
+                data[3].rows[i].value.max, // max
+                data[3].rows[i].value.sum / data[3].rows[i].value.count, // average
+                data[3].rows[i].value.min]; // min 
+
+      trend3.push(v);
+    }
+    
     // render the view
-    var d = { latest: data[0], trend: trend, trend2: trend2};
+    var d = { latest: data[0], trend: trend, trend2: trend2, trend3: trend3};
     res.render('index', d);
   });
 });
 
 
 
-// The IP address of the Cloud Foundry DEA (Droplet Execution Agent) that hosts this application:
-var host = (process.env.VCAP_APP_HOST || 'localhost');
-// The port on the DEA for communication with the application:
-var port = (process.env.VCAP_APP_PORT || 3000);
-// Start server
-server.listen(port, host);
-console.log('App started on port ' + port);
 
 

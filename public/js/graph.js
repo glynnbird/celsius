@@ -21,6 +21,15 @@ var drawChart = function () {
   var chart2 = new google.visualization.LineChart(document.getElementById('chart_div2'));
   chart2.draw(data2, options2);
   
+  // yearly
+  var data3 = google.visualization.arrayToDataTable(trend3);
+  var options3 = {
+    title: 'Last year, by month',
+    colors: ["red","green","blue"]
+  };
+  var chart3 = new google.visualization.LineChart(document.getElementById('chart_div3'));
+  chart3.draw(data3, options3);
+  
 };
 
 

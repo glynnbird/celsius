@@ -2,7 +2,7 @@ doctype html
 html(lang="en")
 head
   include head.jade
-  script(type="text/javascript")  var trend = !{JSON.stringify(trend)}; var trend2 = !{JSON.stringify(trend2)}; 
+  script(type="text/javascript")  var trend = !{JSON.stringify(trend)}; var trend2 = !{JSON.stringify(trend2)}; var trend3 = !{JSON.stringify(trend3)}
   script(type="text/javascript", src="https://www.google.com/jsapi")
   script(src='/socket.io/socket.io.js')
   script(src="/js/graph.js")
@@ -47,6 +47,10 @@ body
     div.row
       div.col-lg-12
         div#chart_div2(width="100%")
+    
+    div.row
+      div.col-lg-12
+        div#chart_div3(width="100%")
     
     div.row
       div.col-lg-12
